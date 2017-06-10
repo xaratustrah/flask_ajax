@@ -1,0 +1,42 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Python Falsk Bootstrap AJAX Example
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<script type="text/javascript">
+function executeQuery() {
+  $.ajax({
+    url: $SCRIPT_ROOT + '/_get_date',
+    success: function(response) {
+      // do something with the return value here if you like
+      $('#result').text(response.result);
+      console.log(response);
+    }
+  });
+  setTimeout(executeQuery, 5000); // you could choose not to continue on failure...
+}
+
+$(document).ready(function() {
+  // run the first time; all subsequent calls will take care of themselves
+  setTimeout(executeQuery, 5000);
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+<h1>Python Falsk Bootstrap AJAX Example</h1>
+<h4>Perform command <b><i>date</i></b> periodically on the server and show the results</h4>
+Result:
+<!-- Use a span to show the results -->
+<p><span id="result"></span></p>
+{% endblock %}
